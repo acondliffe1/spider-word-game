@@ -1,5 +1,6 @@
 export function gameReducer(state, event) {
-  switch (event.type) {
+  const { type, letter } = event;
+  switch (type) {
     case "TYPEWORD":
       return {
         ...state,
@@ -11,17 +12,23 @@ export function gameReducer(state, event) {
         status: "playing",
       };
     case "GUESS":
-      const letter = event.letter;
       return {
         ...state,
-        guessed: { ...state.guessed, [letter]: letter },
-        mistakes: state.mistakes + (state.answer.includes(letter) ? 0 : 1),
-        // Guess
+        guessed: {
+          ...state.guessed,
+          [letter]: letter,
+          [letter.toUpperCase()]: letter,
+        },
+        mistakes:
+          state.mistakes +
+          (state.answer.toLowerCase().includes(letter) ? 0 : 1),
       };
     case "RESET":
+      return initialState;
+    case "FINISH":
       return {
         ...state,
-        status: "idle",
+        status: event.result === "win" ? "won" : "lost",
       };
 
     default:
@@ -37,4 +44,4 @@ export const initialState = {
   error: null,
 };
 
-// status "idle - playing - win - lose"
+// status "idle - playing - won - lost"
