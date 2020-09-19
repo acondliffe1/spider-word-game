@@ -3,7 +3,7 @@ import React from "react";
 const Spider = ({ mistakes }) => {
   const step = Array(mistakes).fill(true);
   return (
-    <div className="spider">
+    <div className={`spider ${step[8] ? "leave" : ""}`}>
       <div className={`spiderweb ${step[0] ? "" : "hidden"}`}></div>
       <div className={`body ${step[0] ? "" : "hidden"}`}>
         <div className={`eye left ${step[0] ? "" : "hidden"}`}></div>

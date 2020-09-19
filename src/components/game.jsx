@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from "react";
-import { Form, InputGroup, Button } from "react-bootstrap";
+import { Form, InputGroup, Button, Image } from "react-bootstrap";
 import { gameReducer, initialState } from "../reducers/reducer";
 import web from "../spider-web.svg";
 import Spider from "./spider";
@@ -24,7 +24,7 @@ const Game = () => {
     return alphabet.split("").map((letter) => (
       <Button
         key={letter}
-        variant="info"
+        variant={guessed[letter] ? "light" : "info"}
         className="btn-lg m-2"
         onClick={() => {
           dispatch({ type: "GUESS", letter });
@@ -50,7 +50,7 @@ const Game = () => {
   }, [status, mistakes, answer, guessedWord]);
 
   return (
-    <div className="container">
+    <div className="container h-100">
       <h1>Spider Word Game</h1>
       {status === "idle" && (
         <React.Fragment>
@@ -60,7 +60,7 @@ const Game = () => {
                 <Form.Control
                   name="word"
                   type="password"
-                  placeholder="Word"
+                  placeholder="Please enter a Word..."
                   onChange={(event) =>
                     dispatch({ type: "TYPEWORD", answer: event.target.value })
                   }
@@ -74,17 +74,18 @@ const Game = () => {
       )}
       {status !== "idle" && (
         <React.Fragment>
-          <div className="container">
-            <img src={web} alt="web" />
+          <div className="container web">
+            <Image src={web} alt="web" fluid />
+            <Spider mistakes={mistakes}></Spider>
+            <div className="keypad pb-3 pt-3">{keypad()}</div>
           </div>
 
-          <Spider mistakes={mistakes}></Spider>
-          <div className="container">
+          <div className="container text-center">
             <h1>{status === "lost" ? answer : guessedWord}</h1>
           </div>
         </React.Fragment>
       )}
-      {status === "playing" && <div className="container">{keypad()}</div>}
+
       {status === "won" && (
         <div className="container">
           <p>Winner!</p>
@@ -96,7 +97,9 @@ const Game = () => {
         </div>
       )}
       {status !== "idle" && (
-        <Button onClick={() => dispatch({ type: "RESET" })}>Reset</Button>
+        <Button size="sm" onClick={() => dispatch({ type: "RESET" })}>
+          Reset
+        </Button>
       )}
     </div>
   );
