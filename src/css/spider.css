@@ -22,6 +22,8 @@
 }
 
 .spider.leave {
+  transition-delay: 2s;
+  transition-duration: 3s;
   top: -120%;
 }
 
